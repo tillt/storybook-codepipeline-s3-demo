@@ -1,5 +1,5 @@
 # Simple workflow for deploying static content to GitHub Pages
-name: Deploy StoryBook content to Pages
+name: Deploy StoryBook content to GitHub Pages
 
 on:
   # Runs on pushes targeting the default branch
@@ -21,6 +21,20 @@ concurrency:
   group: "pages"
   cancel-in-progress: false
 
+inputs:
+  install_command:
+    description: 'Command to install dependencies'
+    required: false
+    default: 'npm install'
+  build_command:
+    description: 'Comand to build storybook'
+    required: false
+    default: 'npm run build-storybook'
+  preview:
+    description: 'Preview'
+    required: false
+    default: 'false'
+
 jobs:
   # Single deploy job since we're just deploying
   deploy:
@@ -31,6 +45,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: 'Build'
+        shell: bash
+        run: |
+          ${{ inputs.install_command }}
+          ${{ inputs.build_command }}
+      - uses: haya14busa/action-cond@v1
+        id: preview
+        with:
+          cond: ${{ inputs.preview == 'true' }}
+          if_true: "pr-${{ github.event.pull_request.number }}"
+          if_false: "main"
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
