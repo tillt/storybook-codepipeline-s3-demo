@@ -1,24 +1,23 @@
 # Simple workflow for deploying static content to GitHub Pages
 name: Deploy StoryBook content to GitHub Pages
 
-inputs:
-  install_command:
-    description: 'Command to install dependencies'
-    required: false
-    default: 'npm install'
-  build_command:
-    description: 'Comand to build storybook'
-    required: false
-    default: 'npm run build-storybook'
-  preview:
-    description: 'Preview'
-    required: false
-    default: 'false'
-
 on:
   # Runs on pushes targeting the default branch
   push:
     branches: ["main"]
+    inputs:
+      install_command:
+        description: 'Command to install dependencies'
+        required: false
+        default: 'npm install'
+      build_command:
+        description: 'Comand to build storybook'
+        required: false
+        default: 'npm run build-storybook'
+      preview:
+        description: 'Preview'
+        required: false
+        default: 'false'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
